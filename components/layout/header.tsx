@@ -22,9 +22,11 @@ const Header: FC = () => {
             </a>
           </li>
           <li className="nav-item">
-            <a className="nav-link" href="">
-              <i className="ion-gear-a"></i>&nbsp;Settings
-            </a>
+            <Link href="/settings">
+              <a className="nav-link">
+                <i className="ion-gear-a"></i>&nbsp;Settings
+              </a>
+            </Link>
           </li>
           <li className="nav-item">
             <Link href="/login">
