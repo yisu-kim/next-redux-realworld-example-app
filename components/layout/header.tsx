@@ -32,9 +32,9 @@ const Header: FC = () => {
             </a>
           </li>
           <li className="nav-item">
-            <a className="nav-link" href="">
-              Sign up
-            </a>
+            <Link href="/register">
+              <a className="nav-link">Sign up</a>
+            </Link>
           </li>
         </ul>
       </div>
