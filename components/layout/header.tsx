@@ -27,9 +27,9 @@ const Header: FC = () => {
             </a>
           </li>
           <li className="nav-item">
-            <a className="nav-link" href="">
-              Sign in
-            </a>
+            <Link href="/login">
+              <a className="nav-link">Sign in</a>
+            </Link>
           </li>
           <li className="nav-item">
             <Link href="/register">
