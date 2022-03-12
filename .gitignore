@@ -35,3 +35,6 @@ yarn-error.log*
 
 # Next build dir
 .next/
+
+# TypeScript build
+tsconfig.tsbuildinfo
