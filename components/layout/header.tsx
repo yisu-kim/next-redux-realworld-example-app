@@ -1,19 +1,20 @@
 import Head from 'next/head';
+import Link from 'next/link';
 import { FC } from 'react';
 
 const Header: FC = () => {
   return (
     <nav className="navbar navbar-light">
       <div className="container">
-        <a className="navbar-brand" href="index.html">
-          conduit
-        </a>
+        <Link href="/">
+          <a className="navbar-brand">conduit</a>
+        </Link>
         <ul className="nav navbar-nav pull-xs-right">
           <li className="nav-item">
             {/* <!-- Add "active" class when you're on that page" --> */}
-            <a className="nav-link active" href="">
-              Home
-            </a>
+            <Link href="/">
+              <a className="nav-link active">Home</a>
+            </Link>
           </li>
           <li className="nav-item">
             <a className="nav-link" href="">
