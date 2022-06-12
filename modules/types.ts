@@ -20,3 +20,7 @@ export interface Articles {
   articles: Article[];
   articlesCount: number;
 }
+
+export interface Tags {
+  tags: string[];
+}
