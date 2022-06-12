@@ -9,7 +9,7 @@ import {
   ApolloProvider,
 } from '@apollo/client';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import Layout from 'components/layout';
+import Layout from 'modules/layout';
 
 const httpLink = new HttpLink({ uri: '/api/graphql' });
 
