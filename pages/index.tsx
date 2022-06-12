@@ -1,9 +1,14 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
+import { useQuery } from 'react-query';
+import axios, { AxiosError } from 'axios';
+import { Articles } from 'types';
 import styles from 'styles/Home.module.css';
 
 const Home: NextPage = () => {
+  const { data, error, isFetching, isError, isSuccess } = useArticles();
+
   return (
     <div className="home-page">
       <Head>
@@ -34,55 +39,52 @@ const Home: NextPage = () => {
                 </li>
               </ul>
             </div>
-
-            <div className="article-preview">
-              <div className="article-meta">
-                <a href="profile.html">
-                  <img src="http://i.imgur.com/Qr71crq.jpg" />
-                </a>
-                <div className="info">
-                  <a href="" className="author">
-                    Eric Simons
+            {isFetching ? (
+              <div className="article-preview">Loading articles...</div>
+            ) : isError ? (
+              <span>Error: {error.message}</span>
+            ) : (
+              isSuccess &&
+              data.articles.map((article, index) => (
+                <div className="article-preview" key={index}>
+                  <div className="article-meta">
+                    <a href="profile.html">
+                      <Image
+                        src={article.author.image}
+                        alt={`${article.author.username}'s profile image`}
+                        width={32}
+                        height={32}
+                      />
+                    </a>
+                    <div className="info">
+                      <a href="" className="author">
+                        {article.author.username}
+                      </a>
+                      <span className="date">{article.createdAt}</span>
+                    </div>
+                    <button className="btn btn-outline-primary btn-sm pull-xs-right">
+                      <i className="ion-heart"></i> {article.favoritesCount}
+                    </button>
+                  </div>
+                  <a href="" className="preview-link">
+                    <h1>{article.title}</h1>
+                    <p>{article.description}</p>
+                    <span>Read more...</span>
+                    <ul className="tag-list">
+                      {article.tagList.map((tag) => (
+                        <li
+                          key={tag}
+                          className="tag-default tag-pill tag-outline"
+                        >
+                          {tag}
+                        </li>
+                      ))}
+                    </ul>
                   </a>
-                  <span className="date">January 20th</span>
                 </div>
-                <button className="btn btn-outline-primary btn-sm pull-xs-right">
-                  <i className="ion-heart"></i> 29
-                </button>
-              </div>
-              <a href="" className="preview-link">
-                <h1>How to build webapps that scale</h1>
-                <p>This is the description for the post.</p>
-                <span>Read more...</span>
-              </a>
-            </div>
-
-            <div className="article-preview">
-              <div className="article-meta">
-                <a href="profile.html">
-                  <img src="http://i.imgur.com/N4VcUeJ.jpg" />
-                </a>
-                <div className="info">
-                  <a href="" className="author">
-                    Albert Pai
-                  </a>
-                  <span className="date">January 20th</span>
-                </div>
-                <button className="btn btn-outline-primary btn-sm pull-xs-right">
-                  <i className="ion-heart"></i> 32
-                </button>
-              </div>
-              <a href="" className="preview-link">
-                <h1>
-                  The song you won&apos;t ever stop singing. No matter how hard
-                  you try.
-                </h1>
-                <p>This is the description for the post.</p>
-                <span>Read more...</span>
-              </a>
-            </div>
+              ))
+            )}
           </div>
-
           <div className="col-md-3">
             <div className="sidebar">
               <p>Popular Tags</p>
@@ -122,3 +124,34 @@ const Home: NextPage = () => {
 };
 
 export default Home;
+
+const useArticles = () => {
+  return useQuery<Articles, AxiosError>('articles', async () => {
+    const {
+      data: {
+        data: { getArticles },
+      },
+    } = await axios.post('api/graphql', {
+      query: `
+        query {
+          getArticles {
+            articles {
+              title
+              description
+              tagList
+              createdAt
+              favoritesCount
+              author {
+                username
+                image
+                following
+              }
+            }
+          }
+        }
+      `,
+    });
+
+    return getArticles;
+  });
+};

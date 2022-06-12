@@ -7,8 +7,8 @@ import {
   InMemoryCache,
   concat,
   ApolloProvider,
-  gql,
 } from '@apollo/client';
+import { QueryClient, QueryClientProvider } from 'react-query';
 import Layout from 'components/layout';
 
 const httpLink = new HttpLink({ uri: '/api/graphql' });
@@ -32,12 +32,16 @@ const client = new ApolloClient({
   link: concat(authMiddleware, httpLink),
 });
 
+const queryClient = new QueryClient();
+
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ApolloProvider client={client}>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
+      <QueryClientProvider client={queryClient}>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </QueryClientProvider>
     </ApolloProvider>
   );
 }
